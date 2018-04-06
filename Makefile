@@ -1,7 +1,5 @@
-all: visualize
-
-visualize: visualizesemiorderlinearsearch.c
-	gcc -o visualize visualizesemiorderlinearsearch.c
+visualize: visualizesemiorderlinearsearch.c 
+	gcc -o visualize $(CFLAGS) visualizesemiorderlinearsearch.c
 
 clean:
 	rm visualize -rf

@@ -8,7 +8,11 @@
 #include <unistd.h>
 
 int MAXRANDNUM;
-#define MATRIXELEMENTSHOWFORMAT "%4lu"
+int TIMEDELAY;
+#ifndef NUMSPACE
+	#define NUMSPACE "4"
+#endif
+#define MATRIXELEMENTSHOWFORMAT "%" NUMSPACE "lu"
 
 #define FG_BLACK "\033[30m"
 #define FG_RED "\033[31m"
@@ -59,7 +63,7 @@ uint64_t ** generatematrix(int size){
 void printmatrix( uint64_t ** matrix, int size ) {
 	for ( int i = 0; i < size; i ++) {
 		for ( int j = 0 ; j < size ; j ++)
-			printf(" "MATRIXELEMENTSHOWFORMAT" ", matrix[i][j] );
+			printf(" "MATRIXELEMENTSHOWFORMAT, matrix[i][j] );
 		printf("\n");
 	}
 }
@@ -67,25 +71,25 @@ void printmatrix( uint64_t ** matrix, int size ) {
 void showmatrix( uint64_t ** matrix, int size,int x, int y, bool found, int x1, int x2, int y1, int y2, bool downwards) {
 	printf("\033[s");
 	printf("\n");
-	usleep(20000);
+	usleep(TIMEDELAY);
 	for ( int i = 0; i < size; i ++) {
 		for ( int j = 0 ; j < size ; j ++)
 
 			if ( i == x && j == y )
 				if ( found )
-					printf( BG_GREEN " "MATRIXELEMENTSHOWFORMAT" " RESET, matrix[i][j] );
+					printf( BG_GREEN " "MATRIXELEMENTSHOWFORMAT RESET, matrix[i][j] );
 				else 
-					printf( BG_YELLOW " "MATRIXELEMENTSHOWFORMAT" " RESET, matrix[i][j] );
+					printf( BG_YELLOW " "MATRIXELEMENTSHOWFORMAT RESET, matrix[i][j] );
 			else
 				if ( i < x1 || i > x2 || j < y1 || j > y2 ) 
-					printf(BG_RED " "MATRIXELEMENTSHOWFORMAT" " RESET, matrix[i][j] );
+					printf(BG_RED " "MATRIXELEMENTSHOWFORMAT RESET, matrix[i][j] );
 				else 
 					if ( i < x && j == y && downwards)
-						printf( BG_CYAN " "MATRIXELEMENTSHOWFORMAT" " RESET , matrix[i][j] );
+						printf( BG_CYAN " "MATRIXELEMENTSHOWFORMAT RESET , matrix[i][j] );
 					else if ( i == x && j < y && !downwards) 
-						printf( BG_CYAN " "MATRIXELEMENTSHOWFORMAT" " RESET , matrix[i][j] );
+						printf( BG_CYAN " "MATRIXELEMENTSHOWFORMAT RESET , matrix[i][j] );
 					else 
-						printf(" "MATRIXELEMENTSHOWFORMAT" ", matrix[i][j] );
+						printf(" "MATRIXELEMENTSHOWFORMAT, matrix[i][j] );
 		printf("\n");
 	}
 	printf("\033[u");
@@ -192,9 +196,10 @@ void signalhandler(int signo){
 	exit(EXIT_SUCCESS);
 }
 int main(int argc, char *argv[]) {
-	if ( argc != 3 ) { printf("format: executable size maxrandom.\n"); exit(EXIT_SUCCESS); }
+	if ( argc != 4 ) { printf("format: executable size maxrandom timedelay.\n"); exit(EXIT_SUCCESS); }
 	int size = atoi(argv[1]);
 	MAXRANDNUM = atoi(argv[2]);
+	TIMEDELAY = atoi(argv[3]);
 	uint64_t **matrix = generatematrix(size);
 	// printmatrix(matrix,size);
 	uint64_t element ;
