@@ -192,6 +192,7 @@ void signalhandler(int signo){
 	exit(EXIT_SUCCESS);
 }
 int main(int argc, char *argv[]) {
+	if ( argc != 3 ) { printf("format: executable size maxrandom.\n"); exit(EXIT_SUCCESS); }
 	int size = atoi(argv[1]);
 	MAXRANDNUM = atoi(argv[2]);
 	uint64_t **matrix = generatematrix(size);
@@ -211,10 +212,10 @@ int main(int argc, char *argv[]) {
 		printf( TOPLEFTCORNER REMOVETOENDLINE "Enter element:" );
 		scanf("%lu",&element);
 		if ( find( matrix, size, element, &x, &y,&comparisons,&depth ) ){
-			printf("Found at (%d, %d) from %d comparisons %d depth\n",x,y, comparisons, depth );
+			printf(REMOVETOENDLINE "Found at (%d, %d) from %d comparisons %d depth\n",x,y, comparisons, depth );
 		}
 		else {
-			printf("Not found from %d comparisons %d depth.\n", comparisons, depth);
+			printf(REMOVETOENDLINE "Not found from %d comparisons %d depth.\n", comparisons, depth);
 		}
  	}
  	return 0;
